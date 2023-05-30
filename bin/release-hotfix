@@ -24,7 +24,7 @@ next_version() {
 }
 
 # sync git refs
-git fetch --all --prune --tags --prune-tags --quiet
+git fetch --all --prune --tags --prune-tags --force --quiet
 
 # save user's initial branch
 curr_branch=$(git branch --show-current)
@@ -32,6 +32,9 @@ curr_branch=$(git branch --show-current)
 # checkout mainstream, aka current minor
 git checkout master --quiet
 git pull --ff-only --quiet
+
+# check version
+[[ $(git describe --tags --abbrev=0 --exact-match) ]] && echo "Commit already tagged" && exit 1
 
 # set versions
 curr_version="$(curr_version)"
